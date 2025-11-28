@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Secret News Constellations — Zama FHEVM</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#e5f2ff;
+      --muted:#9fb7ff;
+      --bg-deep:#020617;
+      --bg-alt:#02081f;
+      --panel:rgba(10,26,74,.86);
+      --accent:#38bdf8;
+      --accent-2:#6366f1;
+      --accent-3:#0ea5e9;
+      --danger:#fb7185;
+      --ok:#22c55e;
+      --line:rgba(148,163,255,.35);
+      --r:18px;
+      --shadow:0 18px 40px rgba(15,23,42,.85);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--ink);
+      font:14px/1.6 Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(800px 800px at 10% 0%, #0f172a 0%, transparent 55%),
+        radial-gradient(880px 720px at 90% 0%, #1d2747 0%, transparent 55%),
+        radial-gradient(880px 720px at 50% 100%, #0b1120 0%, transparent 60%),
+        radial-gradient(circle at 15% 80%, rgba(56,189,248,.14), transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(99,102,241,.18), transparent 60%),
+        linear-gradient(140deg,#020617,#020617 40%,#02081f);
+      background-attachment:fixed;
+      overflow-y:auto;
+    }
+    main.wrap{
+      max-width:1120px;
+      margin:0 auto;
+      padding:26px 18px 34px;
+      position:relative;
+    }
+
+    /* hero */
+    .hero{
+      position:relative;
+      display:grid;
+      grid-template-columns:minmax(0,2.3fr) minmax(0,1.7fr);
+      gap:18px;
+      padding:18px 20px;
+      border-radius:24px;
+      background:radial-gradient(circle at 0% 0%,rgba(56,189,248,.28),transparent 55%),
+                 radial-gradient(circle at 100% 0%,rgba(99,102,241,.26),transparent 55%),
+                 linear-gradient(135deg,rgba(15,23,42,.98),rgba(15,23,42,.96));
+      box-shadow:0 20px 60px rgba(0,0,0,.8);
+      overflow:hidden;
+      border:1px solid rgba(148,163,255,.6);
+      margin-bottom:24px;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-60%;
+      background-image:radial-gradient(circle at 15% 30%,rgba(56,189,248,.11),transparent 45%),
+                       radial-gradient(circle at 80% 80%,rgba(129,140,248,.11),transparent 55%);
+      mix-blend-mode:screen;
+      opacity:.6;
+      pointer-events:none;
+      animation:orbSpin 32s linear infinite;
+    }
+    @keyframes orbSpin{
+      0%{transform:translate3d(0,0,0) rotate(0deg)}
+      50%{transform:translate3d(-12px,10px,0) rotate(180deg)}
+      100%{transform:translate3d(0,0,0) rotate(360deg)}
+    }
+
+    .hero-main{position:relative;z-index:1}
+    .hero-meta{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between}
+    .eyebrow{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      color:rgba(226,232,255,.8);
+      margin-bottom:6px;
+    }
+    .logo{
+      font-family:"Space Grotesk",system-ui,sans-serif;
+      font-weight:700;
+      font-size:2.1rem;
+      letter-spacing:.02em;
+      margin-bottom:4px;
+    }
+    .logo b{
+      background:linear-gradient(135deg,#38bdf8,#6366f1);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .subtitle{
+      margin:4px 0 0;
+      font-size:13px;
+      color:rgba(191,219,254,.92);
+      max-width:420px;
+    }
+    .badge-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      margin-bottom:10px;
+    }
+    .badge{
+      border-radius:999px;
+      padding:6px 10px;
+      border:1px solid rgba(148,163,255,.55);
+      background:radial-gradient(circle at 0 0,rgba(56,189,248,.25),transparent 55%),
+                 rgba(15,23,42,.9);
+      color:rgba(226,232,255,.9);
+      font-size:11px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      white-space:nowrap;
+    }
+    .badge.muted{
+      opacity:.9;
+      border-style:dashed;
+      border-color:rgba(148,163,255,.35);
+      background:rgba(15,23,42,.86);
+    }
+    .btn{
+      appearance:none;
+      border:none;
+      outline:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.03em;
+      text-transform:uppercase;
+      color:#0b1120;
+      background:linear-gradient(135deg,#38bdf8,#6366f1);
+      box-shadow:0 10px 30px rgba(56,189,248,.55);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      transition:transform .12s ease, box-shadow .12s ease, filter .18s ease;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 16px 40px rgba(56,189,248,.75);
+      filter:brightness(1.05);
+    }
+    .btn:active{transform:translateY(0) scale(.99)}
+    .btn.ghost{
+      background:transparent;
+      color:var(--ink);
+      border:1px dashed var(--line);
+      box-shadow:none;
+      text-transform:none;
+      letter-spacing:0;
+    }
+    .btn.warn{
+      background:linear-gradient(135deg,#fb7185,#fb923c);
+      color:#0b1120;
+      box-shadow:0 10px 26px rgba(248,113,113,.7);
+    }
+
+    /* grid layout */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      gap:18px;
+    }
+    .card{
+      position:relative;
+      background:var(--panel);
+      border-radius:var(--r);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      padding:16px 16px 14px;
+      overflow:hidden;
+      opacity:0;
+      transform:translateY(20px) scale(.98) rotate(-.3deg);
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:
+        radial-gradient(circle at 0 0,rgba(56,189,248,.16),transparent 60%),
+        radial-gradient(circle at 100% 100%,rgba(129,140,248,.14),transparent 60%);
+      opacity:.55;
+      mix-blend-mode:soft-light;
+      pointer-events:none;
+    }
+    .card-content{position:relative;z-index:1}
+    .card.in{
+      animation:riseSkew .7s cubic-bezier(.18,.9,.25,1) forwards;
+    }
+    @keyframes riseSkew{
+      0%{opacity:0;transform:translateY(26px) scale(.96) rotate(-1.5deg)}
+      60%{opacity:1;transform:translateY(-4px) scale(1.01) rotate(.6deg)}
+      100%{opacity:1;transform:translateY(0) scale(1) rotate(0deg)}
+    }
+    .card-slant-left{border-top-left-radius:32px;border-bottom-right-radius:28px}
+    .card-slant-right{border-top-right-radius:32px;border-bottom-left-radius:28px}
+    .card-floating{transform:translateY(28px) scale(.97) rotate(.8deg)}
+    .card-floating.in{animation:riseSkewAlt .8s cubic-bezier(.18,.9,.25,1) forwards}
+    @keyframes riseSkewAlt{
+      0%{opacity:0;transform:translateY(30px) scale(.96) rotate(1.4deg)}
+      65%{opacity:1;transform:translateY(-2px) scale(1.01) rotate(-.4deg)}
+      100%{opacity:1;transform:translateY(0) scale(1) rotate(0deg)}
+    }
+
+    .span-12{grid-column:span 12}
+    .span-7{grid-column:span 12}
+    .span-5{grid-column:span 12}
+    .span-4{grid-column:span 12}
+    @media (min-width:960px){
+      .span-7{grid-column:span 7}
+      .span-5{grid-column:span 5}
+      .span-4{grid-column:span 4}
+      #card-match{transform:translateY(12px) scale(.97) rotate(1.2deg)}
+      #card-decrypt{transform:translateY(42px) scale(.97) rotate(-.9deg)}
+      #card-access{transform:translateY(16px) scale(.98) rotate(.6deg)}
+    }
+
+    .hrow{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:8px;
+      gap:8px;
+    }
+    h3{
+      margin:0;
+      font-family:"Space Grotesk",system-ui,sans-serif;
+      font-size:16px;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .tagline{font-size:11px;color:var(--muted)}
+
+    label{
+      display:block;
+      margin:10px 0 4px;
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    input,textarea,select{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(148,163,255,.45);
+      background:rgba(15,23,42,.8);
+      color:var(--ink);
+      padding:10px 11px;
+      font:13px/1.4 Inter,system-ui,sans-serif;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    textarea{min-height:64px;resize:vertical}
+    input:focus,textarea:focus,select:focus{
+      border-color:rgba(56,189,248,.85);
+      box-shadow:0 0 0 1px rgba(56,189,248,.7);
+      background:rgba(15,23,42,.95);
+    }
+
+    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .small{font-size:11px;color:var(--muted)}
+    .status-pill{
+      margin-top:8px;
+      font-size:11px;
+      padding:5px 9px;
+      border-radius:999px;
+      border:1px dashed rgba(148,163,255,.4);
+      display:inline-block;
+      background:rgba(15,23,42,.85);
+    }
+    .status-pill.ok{border-color:rgba(45,212,191,.55);color:#a5f3fc}
+    .status-pill.err{border-color:rgba(248,113,113,.7);color:#fecaca}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+
+    /* topic chips */
+    .topic-cloud{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:4px;
+    }
+    .topic-chip{
+      border-radius:999px;
+      border:1px solid rgba(148,163,255,.4);
+      padding:4px 9px;
+      font-size:11px;
+      color:rgba(191,219,254,.9);
+      background:rgba(15,23,42,.9);
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      transition:background .12s ease,border-color .12s ease,transform .1s ease,box-shadow .12s ease;
+    }
+    .topic-chip span.idx{
+      width:14px;height:14px;border-radius:999px;
+      border:1px solid rgba(148,163,255,.5);
+      font-size:9px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(15,23,42,.95);
+    }
+    .topic-chip[data-active="1"]{
+      background:linear-gradient(135deg,rgba(56,189,248,.9),rgba(129,140,248,.9));
+      border-color:rgba(56,189,248,.9);
+      color:#020617;
+      box-shadow:0 4px 18px rgba(56,189,248,.6);
+      transform:translateY(-1px);
+    }
+    .topic-chip[data-active="1"] span.idx{
+      background:rgba(15,23,42,.9);
+      border-color:rgba(15,23,42,.9);
+      color:#bae6fd;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,255,.45);
+      background:rgba(15,23,42,.86);
+      font-size:11px;
+    }
+    .pill strong{font-weight:700}
+    pre{
+      margin:0;
+      padding:8px 9px;
+      border-radius:12px;
+      background:rgba(15,23,42,.92);
+      border:1px dashed rgba(148,163,255,.45);
+      font-size:11px;
+      white-space:pre-wrap;
+      word-break:break-all;
+    }
+    .result-box{
+      padding:10px 11px;
+      border-radius:12px;
+      border:1px dashed rgba(148,163,255,.45);
+      text-align:center;
+      font-weight:700;
+      background:rgba(15,23,42,.9);
+    }
+    .result-box.good{color:#a7f3d0}
+    .result-box.bad{color:#fecaca}
+
+    footer{
+      margin-top:20px;
+      text-align:center;
+      font-size:11px;
+      color:rgba(148,163,255,.7);
+    }
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">Zama FHEVM • Secret News Matcher</div>
+      <div class="logo">Secret News <b>Constellations</b></div>
+      <p class="subtitle">Publish public news, keep interests fully encrypted, and match them on-chain without revealing what you care about.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="badge-row">
+        <div id="netBadge" class="badge">Network: —</div>
+        <div id="ctrBadge" class="badge mono">Contract: —</div>
+        <div id="profileBadge" class="badge muted">Profile: —</div>
+      </div>
+      <button id="connectBtn" class="btn">Connect Wallet</button>
+    </div>
+  </header>
+
+  <section class="grid">
+    <!-- 1) Article side — publish & update -->
+    <section class="card span-7 card-slant-left" id="card-article">
+      <div class="card-content">
+        <div class="hrow">
+          <h3>News stream / publisher side</h3>
+          <div class="tagline">Public metadata • encrypted readers</div>
+        </div>
+
+        <label>Article URI (IPFS / HTTPS)</label>
+        <textarea id="articleUri" placeholder="https://example.com/news/123 or ipfs://..."></textarea>
+
+        <label>Topics bitmask (article)</label>
+        <div id="articleTopics" class="topic-cloud">
+          <button class="topic-chip" type="button" data-bit="0" data-kind="article"><span class="idx">0</span>AI</button>
+          <button class="topic-chip" type="button" data-bit="1" data-kind="article"><span class="idx">1</span>DeFi</button>
+          <button class="topic-chip" type="button" data-bit="2" data-kind="article"><span class="idx">2</span>NFTs</button>
+          <button class="topic-chip" type="button" data-bit="3" data-kind="article"><span class="idx">3</span>Gaming</button>
+          <button class="topic-chip" type="button" data-bit="4" data-kind="article"><span class="idx">4</span>Regulation</button>
+          <button class="topic-chip" type="button" data-bit="5" data-kind="article"><span class="idx">5</span>L2 / Scaling</button>
+          <button class="topic-chip" type="button" data-bit="6" data-kind="article"><span class="idx">6</span>Security</button>
+          <button class="topic-chip" type="button" data-bit="7" data-kind="article"><span class="idx">7</span>Macro / Markets</button>
+        </div>
+        <div class="row" style="margin-top:6px">
+          <span class="pill mono">mask: <strong id="topicMaskArticle">0</strong></span>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button id="publishBtn" class="btn">Publish article</button>
+          <div class="small">mints new <span class="mono">articleId</span></div>
+        </div>
+        <div class="row" style="margin-top:4px">
+          <span id="publishStatus" class="status-pill"></span>
+          <span id="publishTx" class="status-pill mono"></span>
+          <span id="publishNewId" class="status-pill mono"></span>
+        </div>
+
+        <hr style="border:none;border-top:1px dashed rgba(148,163,255,.4);margin:14px 0 8px"/>
+
+        <div class="row" style="gap:10px;align-items:flex-end">
+          <div style="flex:0 0 90px">
+            <label>Article ID</label>
+            <input id="updateId" type="number" min="0" placeholder="0" class="mono">
+          </div>
+          <div style="flex:1 1 auto">
+            <label>Update URI / topics</label>
+            <div class="row">
+              <button id="updateBtn" class="btn ghost">Update article</button>
+              <div class="small">only publisher can update</div>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:4px">
+          <span id="updateStatus" class="status-pill"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) User side — encrypted interests -->
+    <section class="card span-5 card-slant-right" id="card-profile">
+      <div class="card-content">
+        <div class="hrow">
+          <h3>Reader profile / encrypted interests</h3>
+          <div class="tagline">FHE euint32 mask per wallet</div>
+        </div>
+
+        <label>Topics bitmask (your interests)</label>
+        <div id="interestTopics" class="topic-cloud">
+          <button class="topic-chip" type="button" data-bit="0" data-kind="interest"><span class="idx">0</span>AI</button>
+          <button class="topic-chip" type="button" data-bit="1" data-kind="interest"><span class="idx">1</span>DeFi</button>
+          <button class="topic-chip" type="button" data-bit="2" data-kind="interest"><span class="idx">2</span>NFTs</button>
+          <button class="topic-chip" type="button" data-bit="3" data-kind="interest"><span class="idx">3</span>Gaming</button>
+          <button class="topic-chip" type="button" data-bit="4" data-kind="interest"><span class="idx">4</span>Regulation</button>
+          <button class="topic-chip" type="button" data-bit="5" data-kind="interest"><span class="idx">5</span>L2 / Scaling</button>
+          <button class="topic-chip" type="button" data-bit="6" data-kind="interest"><span class="idx">6</span>Security</button>
+          <button class="topic-chip" type="button" data-bit="7" data-kind="interest"><span class="idx">7</span>Macro / Markets</button>
+        </div>
+        <div class="row" style="margin-top:6px">
+          <span class="pill mono">mask: <strong id="topicMaskInterest">0</strong></span>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button id="setInterestBtn" class="btn">Encrypt &amp; set profile</button>
+          <button id="setInterestPlainBtn" class="btn ghost" style="font-size:11px">Set plain (dev)</button>
+        </div>
+        <div class="row" style="margin-top:4px">
+          <span id="interestStatus" class="status-pill"></span>
+          <span id="interestTx" class="status-pill mono"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) Matching -->
+    <section class="card span-4 card-floating" id="card-match">
+      <div class="card-content">
+        <div class="hrow">
+          <h3>FHE match</h3>
+          <div class="tagline">intersection &ne; 0 (encrypted)</div>
+        </div>
+
+        <label>Article ID to test against</label>
+        <input id="matchArticleId" type="number" min="0" placeholder="0" class="mono"/>
+
+        <div class="row" style="margin-top:10px">
+          <button id="computeMatchBtn" class="btn">computeMatch()</button>
+          <button id="getHandleBtn" class="btn ghost">matchHandle (view)</button>
+        </div>
+
+        <div class="row" style="margin-top:4px">
+          <span id="matchStatus" class="status-pill"></span>
+          <span id="matchTx" class="status-pill mono"></span>
+        </div>
+
+        <label style="margin-top:10px">Match handle (bytes32)</label>
+        <div class="row" style="gap:8px">
+          <span class="pill mono" style="flex:1 1 auto;overflow:hidden;text-overflow:ellipsis">
+            <strong>handle</strong><span id="matchHandleBox">—</span>
+          </span>
+        </div>
+
+        <label style="margin-top:10px">User (for view)</label>
+        <input id="handleUser" placeholder="0x... leave empty = self" class="mono"/>
+      </div>
+    </section>
+
+    <!-- 4) Decrypt console -->
+    <section class="card span-4 card-floating" id="card-decrypt">
+      <div class="card-content">
+        <div class="hrow">
+          <h3>Decrypt console</h3>
+          <div class="tagline">publicDecrypt / userDecrypt</div>
+        </div>
+
+        <label>Paste handle (bytes32)</label>
+        <input id="handleIn" placeholder="0x..." class="mono"/>
+
+        <div class="row" style="margin-top:8px">
+          <button id="publicDecBtn" class="btn">publicDecrypt</button>
+          <button id="userDecBtn" class="btn ghost">userDecrypt (EIP-712)</button>
+        </div>
+        <div class="row" style="margin-top:4px">
+          <span id="decStatus" class="status-pill"></span>
+        </div>
+
+        <label style="margin-top:10px">Decrypted value</label>
+        <div id="decOut" class="result-box">—</div>
+      </div>
+    </section>
+
+    <!-- 5) Access sharing -->
+    <section class="card span-4 card-floating" id="card-access">
+      <div class="card-content">
+        <div class="hrow">
+          <h3>Access &amp; sharing</h3>
+          <div class="tagline">who can see the match flag</div>
+        </div>
+
+        <label>User whose match we share</label>
+        <input id="accessUser" placeholder="0x... leave empty = self" class="mono"/>
+
+        <label>Article ID</label>
+        <input id="accessArticleId" type="number" min="0" placeholder="0" class="mono"/>
+
+        <label>Grant decrypt rights to</label>
+        <input id="accessTo" placeholder="0x..." class="mono"/>
+
+        <div class="row" style="margin-top:8px">
+          <button id="grantAccessBtn" class="btn">grantMatchAccess</button>
+          <button id="makePublicBtn" class="btn warn">makeMatchPublic (me)</button>
+        </div>
+        <div class="row" style="margin-top:4px">
+          <span id="accessStatus" class="status-pill"></span>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <footer>Built with Zama FHEVM • SecretNewsMatcher • Relayer SDK 0.2.0 • Ethers v6</footer>
+</main>
+
+<script type="module">
+  import { BrowserProvider, Contract, getAddress } from "https://cdn.jsdelivr.net/npm/ethers@6.13.4/+esm";
+  import * as ZAMA_SDK from "https://cdn.zama.org/relayer-sdk-js/0.3.0-5/relayer-sdk-js.js";
+
+  // ========= CONFIG =========
+  const CONFIG = {
+    NETWORK_NAME: "Sepolia",
+    CHAIN_ID_HEX: "0xaa36a7",       // 11155111
+    RELAYER_URL: "https://relayer.testnet.zama.cloud",
+    CONTRACT_ADDRESS: "0x9B4713a7e059aEdF821Df0EDB378a185100B2Ef7" // TODO: replace after deploy
+  };
+  console.log("[CFG] SecretNews UI config", CONFIG);
+
+  // ========= ABI (minimal) =========
+  const ABI = [
+    // publishArticle(string uri, uint32 topicMask)
+    {
+      "inputs":[
+        {"internalType":"string","name":"uri","type":"string"},
+        {"internalType":"uint32","name":"topicMask","type":"uint32"}
+      ],
+      "name":"publishArticle",
+      "outputs":[{"internalType":"uint256","name":"articleId","type":"uint256"}],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    // updateArticle(uint256 id, string uri, uint32 topicMask)
+    {
+      "inputs":[
+        {"internalType":"uint256","name":"articleId","type":"uint256"},
+        {"internalType":"string","name":"uri","type":"string"},
+        {"internalType":"uint32","name":"topicMask","type":"uint32"}
+      ],
+      "name":"updateArticle",
+      "outputs":[],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    // setEncryptedInterest(externalEuint32 encMask, bytes attestation)
+    {
+      "inputs":[
+        {"internalType":"externalEuint32","name":"encMask","type":"bytes32"},
+        {"internalType":"bytes","name":"attestation","type":"bytes"}
+      ],
+      "name":"setEncryptedInterest",
+      "outputs":[],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    // setInterestPlain(uint32 plainMask)
+    {
+      "inputs":[{"internalType":"uint32","name":"plainMask","type":"uint32"}],
+      "name":"setInterestPlain",
+      "outputs":[],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    // hasProfile(address user)
+    {
+      "inputs":[{"internalType":"address","name":"user","type":"address"}],
+      "name":"hasProfile",
+      "outputs":[{"internalType":"bool","name":"","type":"bool"}],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    // computeMatch(uint256 articleId)
+    {
+      "inputs":[{"internalType":"uint256","name":"articleId","type":"uint256"}],
+      "name":"computeMatch",
+      "outputs":[{"internalType":"bytes32","name":"handle","type":"bytes32"}],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    // matchHandle(address user, uint256 articleId)
+    {
+      "inputs":[
+        {"internalType":"address","name":"user","type":"address"},
+        {"internalType":"uint256","name":"articleId","type":"uint256"}
+      ],
+      "name":"matchHandle",
+      "outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    // grantMatchAccess(address user, uint256 articleId, address to)
+    {
+      "inputs":[
+        {"internalType":"address","name":"user","type":"address"},
+        {"internalType":"uint256","name":"articleId","type":"uint256"},
+        {"internalType":"address","name":"to","type":"address"}
+      ],
+      "name":"grantMatchAccess",
+      "outputs":[],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    // makeMatchPublic(uint256 articleId)
+    {
+      "inputs":[{"internalType":"uint256","name":"articleId","type":"uint256"}],
+      "name":"makeMatchPublic",
+      "outputs":[],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    // nextArticleId()
+    {
+      "inputs":[],
+      "name":"nextArticleId",
+      "outputs":[{"internalType":"uint256","name":"","type":"uint256"}],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    // articles(uint256)
+    {
+      "inputs":[{"internalType":"uint256","name":"","type":"uint256"}],
+      "name":"articles",
+      "outputs":[
+        {"internalType":"address","name":"publisher","type":"address"},
+        {"internalType":"uint32","name":"topicMask","type":"uint32"},
+        {"internalType":"string","name":"uri","type":"string"},
+        {"internalType":"bool","name":"exists","type":"bool"}
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    // event ArticlePublished(uint256 indexed articleId, address indexed publisher, uint32 topicMask, string uri);
+    {
+      "anonymous":false,
+      "inputs":[
+        {"indexed":true,"internalType":"uint256","name":"articleId","type":"uint256"},
+        {"indexed":true,"internalType":"address","name":"publisher","type":"address"},
+        {"indexed":false,"internalType":"uint32","name":"topicMask","type":"uint32"},
+        {"indexed":false,"internalType":"string","name":"uri","type":"string"}
+      ],
+      "name":"ArticlePublished",
+      "type":"event"
+    },
+    // event MatchComputed(address indexed user, uint256 indexed articleId, bytes32 resultHandle);
+    {
+      "anonymous":false,
+      "inputs":[
+        {"indexed":true,"internalType":"address","name":"user","type":"address"},
+        {"indexed":true,"internalType":"uint256","name":"articleId","type":"uint256"},
+        {"indexed":false,"internalType":"bytes32","name":"resultHandle","type":"bytes32"}
+      ],
+      "name":"MatchComputed",
+      "type":"event"
+    }
+  ];
+  console.log("[ABI] functions", ABI.filter(x=>x.type==="function").map(x=>x.name));
+
+  // ========= Helpers =========
+  const $ = sel => document.querySelector(sel);
+  const short = addr => addr ? addr.slice(0,6) + "…" + addr.slice(-4) : "—";
+  const toHex = u8 => "0x" + Array.from(u8, b => b.toString(16).padStart(2,"0")).join("");
+
+  // UI refs
+  const netBadge = $("#netBadge");
+  const ctrBadge = $("#ctrBadge");
+  const profileBadge = $("#profileBadge");
+  const connectBtn = $("#connectBtn");
+
+  // article
+  const articleUri = $("#articleUri");
+  const publishBtn = $("#publishBtn");
+  const publishStatus = $("#publishStatus");
+  const publishTx = $("#publishTx");
+  const publishNewId = $("#publishNewId");
+  const updateId = $("#updateId");
+  const updateBtn = $("#updateBtn");
+  const updateStatus = $("#updateStatus");
+  const topicMaskArticleOut = $("#topicMaskArticle");
+
+  // profile
+  const topicMaskInterestOut = $("#topicMaskInterest");
+  const setInterestBtn = $("#setInterestBtn");
+  const setInterestPlainBtn = $("#setInterestPlainBtn");
+  const interestStatus = $("#interestStatus");
+  const interestTx = $("#interestTx");
+
+  // match
+  const matchArticleIdInput = $("#matchArticleId");
+  const computeMatchBtn = $("#computeMatchBtn");
+  const getHandleBtn = $("#getHandleBtn");
+  const matchStatus = $("#matchStatus");
+  const matchTx = $("#matchTx");
+  const matchHandleBox = $("#matchHandleBox");
+  const handleUserInput = $("#handleUser");
+
+  // decrypt
+  const handleIn = $("#handleIn");
+  const publicDecBtn = $("#publicDecBtn");
+  const userDecBtn = $("#userDecBtn");
+  const decStatus = $("#decStatus");
+  const decOut = $("#decOut");
+
+  // access
+  const accessUser = $("#accessUser");
+  const accessArticleId = $("#accessArticleId");
+  const accessTo = $("#accessTo");
+  const grantAccessBtn = $("#grantAccessBtn");
+  const makePublicBtn = $("#makePublicBtn");
+  const accessStatus = $("#accessStatus");
+
+  // state
+  let provider, signer, address, contract, relayer;
+
+  netBadge.textContent = `Network: ${CONFIG.NETWORK_NAME}`;
+  ctrBadge.textContent = `Contract: ${short(CONFIG.CONTRACT_ADDRESS)}`;
+
+  // IntersectionObserver animations
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.2});
+  document.querySelectorAll(".card").forEach(el=>io.observe(el));
+  console.log("[UI] Cards wired for animation");
+
+  // topic chips: setup toggling
+  function setupTopicCloud(kind){
+    const chips = document.querySelectorAll(`.topic-chip[data-kind="${kind}"]`);
+    chips.forEach(chip=>{
+      chip.dataset.active = "0";
+      chip.addEventListener("click", ()=>{
+        const active = chip.dataset.active === "1";
+        chip.dataset.active = active ? "0" : "1";
+        const mask = computeMask(kind);
+        if(kind==="article") topicMaskArticleOut.textContent = String(mask);
+        if(kind==="interest") topicMaskInterestOut.textContent = String(mask);
+        console.log(`[Topics] kind=${kind} bit=${chip.dataset.bit} now=${chip.dataset.active}, mask=${mask}`);
+      });
+    });
+  }
+  function computeMask(kind){
+    let mask = 0;
+    document.querySelectorAll(`.topic-chip[data-kind="${kind}"]`).forEach(chip=>{
+      if(chip.dataset.active === "1"){
+        const bit = Number(chip.dataset.bit||"0");
+        mask |= (1 << bit);
+      }
+    });
+    return mask >>> 0;
+  }
+  setupTopicCloud("article");
+  setupTopicCloud("interest");
+
+  // Relayer init
+  async function initRelayer(){
+    if(relayer) return relayer;
+    await ZAMA_SDK.initSDK();
+    const { createInstance, SepoliaConfig } = ZAMA_SDK;
+    relayer = await createInstance({
+      ...SepoliaConfig,
+      relayerUrl: CONFIG.RELAYER_URL,
+      network: window.ethereum,
+      debug: true
+    });
+    console.log("[Relayer] Initialized", { relayerUrl: CONFIG.RELAYER_URL });
+    return relayer;
+  }
+
+  async function refreshProfileBadge(){
+    if(!contract || !address) return;
+    try{
+      const has = await contract.hasProfile(getAddress(address));
+      profileBadge.textContent = "Profile: " + (has ? "encrypted ✔" : "missing ✖");
+      profileBadge.classList.toggle("muted", !has);
+      console.log("[Profile] hasProfile:", has);
+    }catch(e){
+      console.warn("[Profile][WARN] hasProfile failed", e);
+      profileBadge.textContent = "Profile: unknown";
+    }
+  }
+
+  async function connect(){
+    if(!window.ethereum) throw new Error("Install MetaMask / compatible wallet");
+    provider = new BrowserProvider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const net = await provider.getNetwork();
+    console.log("[Wallet] Network chainId", net.chainId);
+    if(net.chainId !== 11155111n){
+      try{
+        await provider.send("wallet_switchEthereumChain", [{ chainId: CONFIG.CHAIN_ID_HEX }]);
+        console.log("[Wallet] Switched to Sepolia");
+      }catch(e){
+        console.warn("[Wallet] Failed to switch chain", e);
+      }
+    }
+    signer = await provider.getSigner();
+    address = await signer.getAddress();
+    contract = new Contract(getAddress(CONFIG.CONTRACT_ADDRESS), ABI, signer);
+    connectBtn.textContent = short(address);
+    console.log("[Wallet] Connected as", address);
+    await initRelayer();
+    await refreshProfileBadge();
+  }
+
+  connectBtn.addEventListener("click", async ()=>{
+    try{ await connect(); }catch(e){ console.error("[Connect][ERR]", e); alert(e.message||String(e)); }
+  });
+
+  async function encryptUint32(value){
+    console.log("[Encrypt] uint32 =>", value);
+    const r = await initRelayer();
+    const enc = r.createEncryptedInput(getAddress(CONFIG.CONTRACT_ADDRESS), getAddress(address));
+    if(enc.add32) enc.add32(BigInt(value));
+    else if(enc.addUint32) enc.addUint32(BigInt(value));
+    else throw new Error("Relayer SDK: no add32/addUint32 available");
+    const { handles, inputProof } = await enc.encrypt();
+    const handle = typeof handles[0] === "string" ? handles[0] : toHex(handles[0]);
+    const att = typeof inputProof === "string"
+      ? (inputProof.startsWith("0x") ? inputProof : ("0x"+inputProof))
+      : toHex(inputProof);
+    console.log("[Encrypt] handle", handle, "attestation bytes", typeof inputProof === "string" ? inputProof.length : (inputProof?.byteLength||0));
+    return { handle, att };
+  }
+
+  // ===== Article logic =====
+  publishBtn.addEventListener("click", async ()=>{
+    try{
+      if(!contract) await connect();
+      const uri = (articleUri.value || "").trim();
+      const mask = computeMask("article");
+      if(!uri) throw new Error("URI is empty");
+      publishStatus.textContent = "Encrypting nothing, just sending tx…";
+      publishStatus.className = "status-pill";
+      const nextBefore = await contract.nextArticleId();
+      console.log("[Article] nextArticleId before publish =", nextBefore.toString());
+      publishStatus.textContent = "Sending publishArticle tx…";
+      const tx = await contract.publishArticle(uri, mask);
+      publishTx.textContent = "TX: " + tx.hash;
+      publishTx.className = "status-pill mono";
+      console.log("[TX] publishArticle", { hash: tx.hash, uri, mask });
+      const rc = await tx.wait();
+      console.log("[TX] publishArticle mined status", rc?.status);
+      const nextAfter = await contract.nextArticleId();
+      const newId = Number(nextAfter - 1n);
+      publishNewId.textContent = "articleId: " + newId;
+      publishNewId.className = "status-pill mono ok";
+      publishStatus.textContent = "Published";
+      publishStatus.className = "status-pill ok";
+    }catch(e){
+      console.error("[publishArticle][ERR]", e);
+      publishStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      publishStatus.className = "status-pill err";
+    }
+  });
+
+  updateBtn.addEventListener("click", async ()=>{
+    try{
+      if(!contract) await connect();
+      const id = Number(updateId.value||"0");
+      const uri = (articleUri.value || "").trim();
+      const mask = computeMask("article");
+      if(Number.isNaN(id)) throw new Error("Bad articleId");
+      if(!uri) throw new Error("URI is empty");
+      updateStatus.textContent = "Sending update tx…";
+      updateStatus.className = "status-pill";
+      const tx = await contract.updateArticle(id, uri, mask);
+      console.log("[TX] updateArticle", { id, mask, uri, hash: tx.hash });
+      await tx.wait();
+      updateStatus.textContent = "Updated";
+      updateStatus.className = "status-pill ok";
+    }catch(e){
+      console.error("[updateArticle][ERR]", e);
+      updateStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      updateStatus.className = "status-pill err";
+    }
+  });
+
+  // ===== Profile logic =====
+  setInterestBtn.addEventListener("click", async ()=>{
+    try{
+      if(!contract) await connect();
+      const mask = computeMask("interest");
+      interestStatus.textContent = "Encrypting FHE interest mask…";
+      interestStatus.className = "status-pill";
+      const { handle, att } = await encryptUint32(mask);
+      interestStatus.textContent = "Sending setEncryptedInterest tx…";
+      const tx = await contract.setEncryptedInterest(handle, att);
+      interestTx.textContent = "TX: " + tx.hash;
+      interestTx.className = "status-pill mono";
+      console.log("[TX] setEncryptedInterest", { mask, handle, hash: tx.hash });
+      await tx.wait();
+      interestStatus.textContent = "Encrypted profile saved";
+      interestStatus.className = "status-pill ok";
+      await refreshProfileBadge();
+    }catch(e){
+      console.error("[setEncryptedInterest][ERR]", e);
+      interestStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      interestStatus.className = "status-pill err";
+    }
+  });
+
+  setInterestPlainBtn.addEventListener("click", async ()=>{
+    try{
+      if(!contract) await connect();
+      const mask = computeMask("interest");
+      interestStatus.textContent = "setInterestPlain (dev) tx…";
+      interestStatus.className = "status-pill";
+      const tx = await contract.setInterestPlain(mask);
+      interestTx.textContent = "TX: " + tx.hash;
+      interestTx.className = "status-pill mono";
+      console.log("[TX] setInterestPlain", { mask, hash: tx.hash });
+      await tx.wait();
+      interestStatus.textContent = "Plain profile set (dev only)";
+      interestStatus.className = "status-pill ok";
+      await refreshProfileBadge();
+    }catch(e){
+      console.error("[setInterestPlain][ERR]", e);
+      interestStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      interestStatus.className = "status-pill err";
+    }
+  });
+
+  // ===== Match logic =====
+  function ensureUser(addrLike){
+    if(addrLike && addrLike.trim()){
+      return getAddress(addrLike.trim());
+    }
+    return getAddress(address);
+  }
+
+  computeMatchBtn.addEventListener("click", async ()=>{
+    try{
+      if(!contract) await connect();
+      const id = Number(matchArticleIdInput.value||"0");
+      if(Number.isNaN(id)) throw new Error("Bad articleId");
+      matchStatus.textContent = "computeMatch tx…";
+      matchStatus.className = "status-pill";
+      const tx = await contract.computeMatch(id);
+      matchTx.textContent = "TX: " + tx.hash;
+      matchTx.className = "status-pill mono";
+      console.log("[TX] computeMatch", { id, hash: tx.hash });
+      await tx.wait();
+      const self = getAddress(address);
+      const handle = await contract.matchHandle(self, id);
+      matchHandleBox.textContent = String(handle);
+      handleIn.value = String(handle);
+      console.log("[Match] handle (self,id) =", { user:self, id, handle });
+      matchStatus.textContent = "Computed";
+      matchStatus.className = "status-pill ok";
+    }catch(e){
+      console.error("[computeMatch][ERR]", e);
+      matchStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      matchStatus.className = "status-pill err";
+    }
+  });
+
+  getHandleBtn.addEventListener("click", async ()=>{
+    try{
+      if(!contract) await connect();
+      const id = Number(matchArticleIdInput.value||"0");
+      if(Number.isNaN(id)) throw new Error("Bad articleId");
+      const user = ensureUser(handleUserInput.value || address);
+      matchStatus.textContent = "Fetching matchHandle…";
+      matchStatus.className = "status-pill";
+      const handle = await contract.matchHandle(user, id);
+      matchHandleBox.textContent = String(handle);
+      handleIn.value = String(handle);
+      console.log("[matchHandle] view", { user, id, handle });
+      matchStatus.textContent = "OK";
+      matchStatus.className = "status-pill ok";
+    }catch(e){
+      console.error("[matchHandle][ERR]", e);
+      matchStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      matchStatus.className = "status-pill err";
+    }
+  });
+
+  // ===== Decrypt logic =====
+  function showDecrypted(handle, out){
+    const keys = Object.keys(out||{});
+    const directKey = out[handle] !== undefined ? handle : keys.find(k=>k.toLowerCase() === handle.toLowerCase());
+    const raw = directKey ? out[directKey] : undefined;
+    console.log("[Decrypt][show]", { handle, resolvedKey:directKey, raw });
+
+    if(raw === undefined){
+      decOut.textContent = "—";
+      decOut.className = "result-box";
+      return;
+    }
+    const num = Number(raw);
+    if(num === 0 || num === 1){
+      const isTrue = Boolean(num);
+      decOut.textContent = isTrue ? "true ✅ (match)" : "false ❌ (no match)";
+      decOut.className = "result-box " + (isTrue ? "good" : "bad");
+    }else if(Number.isFinite(num)){
+      decOut.textContent = String(num);
+      decOut.className = "result-box";
+    }else{
+      decOut.textContent = String(raw);
+      decOut.className = "result-box";
+    }
+  }
+
+  publicDecBtn.addEventListener("click", async ()=>{
+    try{
+      const h = (handleIn.value||"").trim();
+      if(!h) throw new Error("Paste handle first");
+      decStatus.textContent = "publicDecrypt…";
+      decStatus.className = "status-pill";
+      const r = await initRelayer();
+      const out = await r.publicDecrypt([
+        { handle: h, contractAddress: getAddress(CONFIG.CONTRACT_ADDRESS) }
+      ]);
+      console.log("[Decrypt][public] raw", out);
+      showDecrypted(h, out);
+      decStatus.textContent = "Done (public)";
+      decStatus.className = "status-pill ok";
+    }catch(e){
+      console.error("[publicDecrypt][ERR]", e);
+      decStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      decStatus.className = "status-pill err";
+    }
+  });
+
+  userDecBtn.addEventListener("click", async ()=>{
+    try{
+      const h = (handleIn.value||"").trim();
+      if(!h) throw new Error("Paste handle first");
+      decStatus.textContent = "Preparing EIP-712…";
+      decStatus.className = "status-pill";
+      const r = await initRelayer();
+      const kp = await ZAMA_SDK.generateKeypair();
+      console.log("[EIP712] keypair", { pub:(kp.publicKey||"").slice(0,18)+"…" });
+      const startTs = Math.floor(Date.now()/1000).toString();
+      const days = "7";
+      const eip = r.createEIP712(kp.publicKey, [getAddress(CONFIG.CONTRACT_ADDRESS)], startTs, days);
+      const provider2 = new BrowserProvider(window.ethereum);
+      const signer2 = await provider2.getSigner();
+      const signature = await signer2.signTypedData(
+        eip.domain,
+        { UserDecryptRequestVerification: eip.types.UserDecryptRequestVerification },
+        eip.message
+      );
+      console.log("[EIP712] signed", signature.slice(0,18)+"…");
+      decStatus.textContent = "userDecrypt…";
+      const out = await r.userDecrypt(
+        [{ handle: h, contractAddress: getAddress(CONFIG.CONTRACT_ADDRESS) }],
+        kp.privateKey,
+        kp.publicKey,
+        signature.replace(/^0x/,""),
+        [getAddress(CONFIG.CONTRACT_ADDRESS)],
+        await signer2.getAddress(),
+        startTs,
+        days
+      );
+      console.log("[Decrypt][user] raw", out);
+      showDecrypted(h, out);
+      decStatus.textContent = "Done (userDecrypt)";
+      decStatus.className = "status-pill ok";
+    }catch(e){
+      console.error("[userDecrypt][ERR]", e);
+      decStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      decStatus.className = "status-pill err";
+    }
+  });
+
+  // ===== Access controls =====
+  grantAccessBtn.addEventListener("click", async ()=>{
+    try{
+      if(!contract) await connect();
+      const articleId = Number(accessArticleId.value||"0");
+      if(Number.isNaN(articleId)) throw new Error("Bad articleId");
+      const user = ensureUser(accessUser.value || address);
+      const to = getAddress((accessTo.value||"").trim());
+      accessStatus.textContent = "grantMatchAccess tx…";
+      accessStatus.className = "status-pill";
+      const tx = await contract.grantMatchAccess(user, articleId, to);
+      console.log("[TX] grantMatchAccess", { user, articleId, to, hash: tx.hash });
+      await tx.wait();
+      accessStatus.textContent = "Access granted";
+      accessStatus.className = "status-pill ok";
+    }catch(e){
+      console.error("[grantMatchAccess][ERR]", e);
+      accessStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      accessStatus.className = "status-pill err";
+    }
+  });
+
+  makePublicBtn.addEventListener("click", async ()=>{
+    try{
+      if(!contract) await connect();
+      const articleId = Number(accessArticleId.value||"0");
+      if(Number.isNaN(articleId)) throw new Error("Bad articleId");
+      accessStatus.textContent = "makeMatchPublic tx…";
+      accessStatus.className = "status-pill";
+      const tx = await contract.makeMatchPublic(articleId);
+      console.log("[TX] makeMatchPublic", { articleId, hash: tx.hash });
+      await tx.wait();
+      accessStatus.textContent = "Match made publicly decryptable";
+      accessStatus.className = "status-pill ok";
+    }catch(e){
+      console.error("[makeMatchPublic][ERR]", e);
+      accessStatus.textContent = "Error: " + (e.reason||e.message||String(e));
+      accessStatus.className = "status-pill err";
+    }
+  });
+
+  console.log("[Boot] Secret News Constellations UI ready");
+</script>
+</body>
+</html>
